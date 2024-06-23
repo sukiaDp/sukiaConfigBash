@@ -1,4 +1,5 @@
-# 脚本名称：install_gcc_opencv_boost.sh
+#!/bin/bash
+
 # 描述：自动切换PPA源并安装GCC 13、OpenCV和Boost库，然后切换至GCC 13
 
 set -e
@@ -6,38 +7,35 @@ set -e
 echo "更新软件包列表..."
 sudo apt-get update
 
-echo "添加Ubuntu Toolchain测试PPA..."
-sudo add-apt-repository ppa:ubuntu-toolchain-r/test -y
-
-echo "更新软件包列表..."
-sudo apt-get update
+echo "检查并添加Ubuntu Toolchain测试PPA..."
+if ! grep -q "^deb .*/ubuntu-toolchain-r/test" /etc/apt/sources.list /etc/apt/sources.list.d/*; then
+    sudo add-apt-repository ppa:ubuntu-toolchain-r/test -y
+    sudo apt-get update
+fi
 
 echo "安装GCC 13和G++ 13..."
 sudo apt-get install gcc-13 g++-13 -y
 
-echo "使用update-alternatives配置GCC和G++..."
+echo "配置GCC和G++为默认版本..."
 sudo update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-13 60 --slave /usr/bin/g++ g++ /usr/bin/g++-13
 
 echo "切换默认GCC版本至GCC 13..."
-sudo update-alternatives --config gcc
+sudo update-alternatives --set gcc /usr/bin/gcc-13
 
-echo "验证GCC版本..."
-gcc -v
-
-echo "添加OpenCV PPA..."
-sudo add-apt-repository ppa:opencv/opencv -y
-
-echo "更新软件包列表..."
-sudo apt-get update
+echo "检查并添加OpenCV PPA..."
+if ! grep -q "^deb .*/opencv" /etc/apt/sources.list /etc/apt/sources.list.d/*; then
+    sudo add-apt-repository ppa:opencv/opencv -y
+    sudo apt-get update
+fi
 
 echo "安装OpenCV库..."
 sudo apt-get install libopencv-dev -y
 
-echo "添加Boost库PPA..."
-sudo add-apt-repository ppa:mhier/libboost-latest -y
-
-echo "更新软件包列表..."
-sudo apt-get update
+echo "检查并添加Boost库PPA..."
+if ! grep -q "^deb .*/mhier/libboost-latest" /etc/apt/sources.list /etc/apt/sources.list.d/*; then
+    sudo add-apt-repository ppa:mhier/libboost-latest -y
+    sudo apt-get update
+fi
 
 echo "安装Boost库..."
 sudo apt-get install libboost-all-dev -y
