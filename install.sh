@@ -22,12 +22,6 @@ sudo update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-13 60 --slave /
 echo "切换默认GCC版本至GCC 13..."
 sudo update-alternatives --set gcc /usr/bin/gcc-13
 
-echo "检查并添加OpenCV PPA..."
-if ! grep -q "^deb .*/opencv" /etc/apt/sources.list /etc/apt/sources.list.d/*; then
-    sudo add-apt-repository ppa:opencv/opencv -y
-    sudo apt-get update
-fi
-
 echo "安装OpenCV库..."
 sudo apt-get install libopencv-dev -y
 
