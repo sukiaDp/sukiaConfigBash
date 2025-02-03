@@ -32,7 +32,7 @@ if ! grep -q "^deb .*/mhier/libboost-latest" /etc/apt/sources.list /etc/apt/sour
 fi
 
 echo "安装Boost库..."
-sudo apt-get install libboost-all-dev -y
+sudo apt install libboost1.81-dev -y
 
 echo "验证安装版本..."
 gcc -v
